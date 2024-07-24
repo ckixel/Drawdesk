@@ -11,8 +11,8 @@
     
     <script src="https://kit.fontawesome.com/206d7bad7d.js" crossorigin="anonymous"></script>
 
-    <link type="text/css" rel="stylesheet" href="/main.css" id="theme">
-    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="main.css" id="theme">
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
 </head>
 <body>
     <div class="pop-up" id="share" style="position: absolute; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; position: fixed;">
@@ -38,13 +38,13 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
             <div class="options">
                 <li title="Cursor" id="cursorButton">
-                    <img style="width: inherit; height: inherit;" src="/public/cursor-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/cursor-icon.png">
                 </li>
                 <li title="Hand" id="handButton">
-                    <img style="width: inherit; height: inherit;" src="/public/hand-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/hand-icon.png">
                 </li>
                 <li id="drawButton">
-                    <img id="drawButtonImg" style="width: inherit; height: inherit;" src="/public/pen-icon.png">
+                    <img id="drawButtonImg" style="width: inherit; height: inherit;" src="public/pen-icon.png">
                     <ul class="dropMenu">
                         <li title="Pen" class="drawType" id="pen" style="content: url('/public/pen-icon.png');"></li>
                         <li title="Line" class="drawType" id="line" style="content: url('/public/line-icon.png');"></li>
@@ -53,7 +53,7 @@
                     </ul>
                 </li>
                 <li id="eraserButton">
-                    <img id="modifyButtonImg" style="width: inherit; height: inherit;" src="/public/eraser-icon.png">
+                    <img id="modifyButtonImg" style="width: inherit; height: inherit;" src="public/eraser-icon.png">
                     <ul class="dropMenu">
                         <li title="Eraser" class="modifyType" id="eraser" style="content: url('/public/eraser-icon.png');"></li>
                         <li title="Line eraser" class="modifyType" id="line_eraser" style="content: url('/public/line_eraser-icon.png');"></li>
@@ -61,7 +61,7 @@
                     </ul>
                 </li>
                 <li id="shapeButton">
-                    <img id="shapeButtonImg" style="width: inherit; height: inherit;" src="/public/rectangle-icon.png">
+                    <img id="shapeButtonImg" style="width: inherit; height: inherit;" src="public/rectangle-icon.png">
                     <ul class="dropMenu">
                         <li title="Rectangle" class="shape" id="rectangle" style="content: url('/public/rectangle-icon.png');"></li>
                         <li title="Ellipse" class="shape" id="ellipse" style="content: url('/public/circle-icon.png');"></li>
@@ -70,23 +70,23 @@
                     </ul>
                 </li>
                 <li title="Text" id="textButton">
-                    <img style="width: inherit; height: inherit;" src="/public/text-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/text-icon.png">
                 </li>
                 <li id="imageButton">
                     <input type="file" id="imageInput" accept="image/*">
                     <label for="imageInput" id="imageLabel" style="content: url('/public/image-icon.png')"></label>
                 </li>
                 <li title="Clean" id="trashcanButton">
-                    <img style="width: inherit; height: inherit;" src="/public/trashcan-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/trashcan-icon.png">
                 </li>
                 <li id="minusButton">
-                    <img  title="Zoom out" style="width: inherit; height: inherit;" src="/public/minus-icon.png">
+                    <img  title="Zoom out" style="width: inherit; height: inherit;" src="public/minus-icon.png">
                 </li>
                 <li id="plusButton">
-                    <img title="Zoom in" style="width: inherit; height: inherit;" src="/public/plus-icon.png">
+                    <img title="Zoom in" style="width: inherit; height: inherit;" src="public/plus-icon.png">
                 </li>
                 <li id="colorButton">
-                    <img title="Color" style="width: inherit; height: inherit;" src="/public/color-icon.png">
+                    <img title="Color" style="width: inherit; height: inherit;" src="public/color-icon.png">
                     <ul class="dropMenu">
                         <li title="Outline color" class="color" id="outline_color">
                             <input class="invisible" type="color" id="colorInput" onchange="color = $(this).val();" oninput="$('#colorLabel').css('background-color', avColor($(this).val(), window.getComputedStyle(document.body).getPropertyValue('--button')))">
@@ -99,7 +99,7 @@
                     </ul>
                 </li>
                 <li id="widthButton">
-                    <img style="width: inherit; height: inherit;" src="/public/size-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/size-icon.png">
                     <ul class="dropMenu">
                         <li><input type="range" id="widthSlider" class="styledSlider" oninput="$('#widthValue').html($(this).val() + 'px')" onchange="lineWidth = $(this).val();" style="writing-mode: vertical-rl;" min="1" max="70" value="3" step="1"/></li>
                         <li><p id="widthValue" style="margin: 2px; color: var(--text); font-weight: bold;">3px</p></li>
@@ -107,14 +107,14 @@
                 </li>
                 <!--
                 <li id="debugButton">
-                    <img style="width: inherit; height: inherit;" src="/public/bug-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/bug-icon.png">
                 </li>
                 -->
             </div>
             <div class="options">
-                <li title="Share" style="display: flex; justify-content: center; align-items: center;" onclick="share()"><img src="/public/share-icon.png" style="width: inherit; height: inherit;"></li>
+                <li title="Share" style="display: flex; justify-content: center; align-items: center;" onclick="share()"><img src="public/share-icon.png" style="width: inherit; height: inherit;"></li>
                 <li id="themeButton">
-                    <img style="width: inherit; height: inherit;" src="/public/theme-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/theme-icon.png">
                     <ul class="dropMenu">
                         <li class="themeColor" id="white"><div></div></li>
                         <li class="themeColor" id="grey"><div></div></li>
@@ -125,18 +125,18 @@
                     </ul>
                 </li>
                 <li id="settingsButton">
-                    <img style="width: inherit; height: inherit;" src="/public/settings-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/settings-icon.png">
                     <ul class="dropMenu">
                         <li class="settingsType" id="gridButton">
-                            <img style="width: inherit; height: inherit;" src="/public/grid-icon.png">
+                            <img style="width: inherit; height: inherit;" src="public/grid-icon.png">
                         </li>
                         <li class="settingsType" id="panelButton">
-                            <img style="width: inherit; height: inherit;" src="/public/panel-icon.png">
+                            <img style="width: inherit; height: inherit;" src="public/panel-icon.png">
                         </li>
                     </ul>
                 </li>
                 <li title="Home" id="menuButton">
-                    <img style="width: inherit; height: inherit;" src="/public/menu-icon.png">
+                    <img style="width: inherit; height: inherit;" src="public/menu-icon.png">
                 </li>
             </div>
         </div>
