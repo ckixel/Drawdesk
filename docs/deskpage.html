@@ -135,7 +135,7 @@
                         </li>
                     </ul>
                 </li>
-                <li title="Home" id="menuButton">
+                <li title="" id="menuButton">
                     <img style="width: inherit; height: inherit;" src="public/menu-icon.png">
                 </li>
             </div>
@@ -229,7 +229,7 @@
             redraw()
         }
         document.getElementById("menuButton").onclick = () => {
-            window.location.href = "/home"
+            window.location.href = "../home"
         }
         for(let el of document.getElementsByClassName("drawType")){
             el.onclick = () => {
