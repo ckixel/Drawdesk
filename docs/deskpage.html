@@ -11,7 +11,7 @@
     
     <script src="https://kit.fontawesome.com/206d7bad7d.js" crossorigin="anonymous"></script>
 
-    <link type="text/css" rel="stylesheet" href="main.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="public/main.css" id="theme">
     <link rel="icon" type="image/x-icon" href="public/favicon.ico">
 </head>
 <body>
@@ -46,27 +46,27 @@
                 <li id="drawButton">
                     <img id="drawButtonImg" style="width: inherit; height: inherit;" src="public/pen-icon.png">
                     <ul class="dropMenu">
-                        <li title="Pen" class="drawType" id="pen" style="content: url('/public/pen-icon.png');"></li>
-                        <li title="Line" class="drawType" id="line" style="content: url('/public/line-icon.png');"></li>
-                        <!-- <li title="Dotted line" class="drawType" id="dotted_line" style="content: url('/public/dotted_line-icon.png');"></li> -->
-                        <li title="Filling pen" class="drawType" id="filling_pen" style="content: url('/public/filling_pen-icon.png');"></li>
+                        <li title="Pen" class="drawType" id="pen" style="content: url("public/pen-icon.png");"></li>
+                        <li title="Line" class="drawType" id="line" style="content: url("public/line-icon.png");"></li>
+                        <!-- <li title="Dotted line" class="drawType" id="dotted_line" style="content: url("public/dotted_line-icon.png");"></li> -->
+                        <li title="Filling pen" class="drawType" id="filling_pen" style="content: url("public/filling_pen-icon.png");"></li>
                     </ul>
                 </li>
                 <li id="eraserButton">
                     <img id="modifyButtonImg" style="width: inherit; height: inherit;" src="public/eraser-icon.png">
                     <ul class="dropMenu">
-                        <li title="Eraser" class="modifyType" id="eraser" style="content: url('/public/eraser-icon.png');"></li>
-                        <li title="Line eraser" class="modifyType" id="line_eraser" style="content: url('/public/line_eraser-icon.png');"></li>
-                        <li title="Finger" class="modifyType" id="finger" style="content: url('/public/finger-icon.png');"></li>
+                        <li title="Eraser" class="modifyType" id="eraser" style="content: url("public/eraser-icon.png");"></li>
+                        <li title="Line eraser" class="modifyType" id="line_eraser" style="content: url("public/line_eraser-icon.png");"></li>
+                        <li title="Finger" class="modifyType" id="finger" style="content: url("public/finger-icon.png");"></li>
                     </ul>
                 </li>
                 <li id="shapeButton">
                     <img id="shapeButtonImg" style="width: inherit; height: inherit;" src="public/rectangle-icon.png">
                     <ul class="dropMenu">
-                        <li title="Rectangle" class="shape" id="rectangle" style="content: url('/public/rectangle-icon.png');"></li>
-                        <li title="Ellipse" class="shape" id="ellipse" style="content: url('/public/circle-icon.png');"></li>
-                        <li title="Filling rectangle" class="shape" id="filling_rectangle" style="content: url('/public/filling_rectangle-icon.png');"></li>
-                        <li title="Filling ellipse" class="shape" id="filling_ellipse" style="content: url('/public/filling_circle-icon.png');"></li>
+                        <li title="Rectangle" class="shape" id="rectangle" style="content: url("public/rectangle-icon.png");"></li>
+                        <li title="Ellipse" class="shape" id="ellipse" style="content: url("public/circle-icon.png");"></li>
+                        <li title="Filling rectangle" class="shape" id="filling_rectangle" style="content: url("public/filling_rectangle-icon.png");"></li>
+                        <li title="Filling ellipse" class="shape" id="filling_ellipse" style="content: url("public/filling_circle-icon.png");"></li>
                     </ul>
                 </li>
                 <li title="Text" id="textButton">
@@ -74,7 +74,7 @@
                 </li>
                 <li id="imageButton">
                     <input type="file" id="imageInput" accept="image/*">
-                    <label for="imageInput" id="imageLabel" style="content: url('/public/image-icon.png')"></label>
+                    <label for="imageInput" id="imageLabel" style="content: url("public/image-icon.png")"></label>
                 </li>
                 <li title="Clean" id="trashcanButton">
                     <img style="width: inherit; height: inherit;" src="public/trashcan-icon.png">
@@ -90,11 +90,11 @@
                     <ul class="dropMenu">
                         <li title="Outline color" class="color" id="outline_color">
                             <input class="invisible" type="color" id="colorInput" onchange="color = $(this).val();" oninput="$('#colorLabel').css('background-color', avColor($(this).val(), window.getComputedStyle(document.body).getPropertyValue('--button')))">
-                            <label for="colorInput" id="colorLabel" style="display: block; border-radius: 5px; content: url('/public/outline_color-icon.png')"></label>
+                            <label for="colorInput" id="colorLabel" style="display: block; border-radius: 5px; content: url("public/outline_color-icon.png")"></label>
                         </li>
                         <li title="Fill color" class="color" id="fill_color">
                             <input class="invisible" type="color" id="fillColorInput" onchange="fill_color = $(this).val();" oninput="$('#fill_colorLabel').css('background-color', avColor($(this).val(), window.getComputedStyle(document.body).getPropertyValue('--button')))">
-                            <label for="fillColorInput" id="fill_colorLabel" style="display: block; border-radius: 5px; content: url('/public/fill_color-icon.png')"></label>
+                            <label for="fillColorInput" id="fill_colorLabel" style="display: block; border-radius: 5px; content: url("public/fill_color-icon.png")"></label>
                         </li>
                     </ul>
                 </li>
