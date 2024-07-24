@@ -1,68 +1,103 @@
+/* ---------- Desk ---------- */
+* {
+    transition: background-color .2s ease;
+}
 :root{
     --white: #e7e7e7;
     --grey: #888b8d;
     --black: #353535;
-    --beige: #ebe3db;
+    --blue: #3c444e;
     --green: #a3b18a;
-    --blue: #c3dde4;
+    --beige: #ebe3db;
+    --new: #000000;
 }
 body.theme_white {
     --background: #eeeeee;
-    --foreground: #e7e7e7;
-    --text: #000000;
+    --foreground: #dddddd;
+    --text: #222222;
     --button: #c5c5c5;
     --buttonHover: #b4b4b4;
     --buttonActive: #919191;
+    --contrast: #666666;
+    --link: #1a2d97;
+    --error: #991d1d;
 }
 body.theme_grey {
     --background: #a1a3a5;
     --foreground: #888b8d;
-    --text: #000000;
+    --text: #222222;
     --button: #676a6d;
     --buttonHover: #525557;
     --buttonActive: #3c3e41;
+    --contrast: #333333;
+    --link: #1a2d97;
+    --error: #991d1d;
 }
 body.theme_black {
     --background: #2c2c2c;
     --foreground: #353535;
-    --text: #cccccc;
+    --text: #aaaaaa;
     --button: #424242;
     --buttonHover: #474747;
     --buttonActive: #696969;
+    --contrast: #888888;
+    --link: #485cd1;
+    --error: #ce4141;
 }
 body.theme_beige {
     --background: #e7e2dd;
     --foreground: #dad0bf;
-    --text: #000000;
+    --text: #222222;
     --button: #B0A695;
     --buttonHover: #8f7d6a;
     --buttonActive: #776B5D;
+    --contrast: #473f36;
+    --link: #1a2d97;
+    --error: #991d1d;
 }
 body.theme_green {
     --background: #dad7cd;
     --foreground: #a3b18a;
-    --text: #000000;
+    --text: #222222;
     --button: #758f5d;
     --buttonHover: #607e4d;
     --buttonActive: #496b3f;
+    --contrast: #2a3f24;
+    --link: #1a2d97;
+    --error: #991d1d;
 }
 body.theme_blue {
-    --background: #e9f4f7;
-    --foreground: #c3dde4;
-    --text: #000000;
-    --button: rgb(154, 191, 197);
-    --buttonHover: #85afb8;
-    --buttonActive: #729ba3;
+    --background: #3c444e;
+    --foreground: #272e36;
+    --text: #aaaaaa;
+    --button: #313841;
+    --buttonHover: #232b31;
+    --buttonActive: #171c22;
+    --contrast: #81878f;
+    --link: #485cd1;
+    --error: #ce4141;
 }
-html {
-    overflow: hidden;
+body.theme_new {
+    --background: #ffffff;
+    --foreground: transparent;
+    --text: #222222;
+    --button: #c5c5c5;
+    --buttonHover: #b4b4b4;
+    --buttonActive: #919191;
+    --contrast: #666666;
+    --link: #1a2d97;
+    --error: #991d1d;
 }
-body {
-    background-color: #111111;
+html::-webkit-scrollbar {
+    display: none;
 }
 html, body{
     margin: 0;
     padding: 0
+}
+body {
+    background: var(--background);
+    transition: background-color .2s ease;
 }
 div#upperPanel {
     position: absolute;
@@ -121,34 +156,34 @@ div#upperPanel {
     margin: 10px;
     display: inline-block;
     background-color: transparent;
+}
+.options > li, button, .button {
+    float: left;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color .2s ease;
+    transition: border-radius .2s ease;
+    background-color: var(--button);
+    margin: 10px;
+    border-radius: 8px;
+    border: 0;
+    padding: 10px;
+    color: var(--text);
 
-    > li {
-        float: left;
-        width: 40px;
-        height: 40px;
-        position: relative;
-        cursor: pointer;
-        transition: background-color .2s ease-in-out;
-        transition: border-radius .2s ease-in-out;
-        background-color: var(--button);
-        margin: 10px;
-        border-radius: 8px;
-        padding: 10px;
-
-        &:hover{
-            background-color: var(--buttonHover);
-            border-radius: 8px 8px 8px 8px;
-        }
-        
-        &:hover:has(.dropMenu) {
-            background-color: var(--buttonHover);
-            border-radius: 8px 8px 0px 0px;
-        }
-        
-        &:active{
-            background-color: var(--buttonActive);      
-        }
-
+    &:hover{
+        background-color: var(--buttonHover);
+        border-radius: 8px 8px 8px 8px;
+    }
+    
+    &:hover:has(.dropMenu) {
+        background-color: var(--buttonHover);
+        border-radius: 8px 8px 0px 0px;
+    }
+    
+    &:active{
+        background-color: var(--buttonActive);      
     }
 }
 
@@ -158,7 +193,9 @@ ul.dropMenu {
     top: 100%;
     left: 0%;
     width: 100%;
+    list-style: none;
     padding: 0;
+    margin: 0;
   
     > li {
         background: var(--button);
@@ -192,13 +229,28 @@ li:hover > ul.dropMenu li {
     animation: anim 0.2s ease-in-out;
 }
 ul.dropMenu li.shape {
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+}
+ul.dropMenu li.color {
+    width: 34px;
+    height: 34px;
     padding: 8px;
 }
 ul.dropMenu li.drawType {
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+}
+ul.dropMenu li.modifyType {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+}
+ul.dropMenu li.settingsType {
+    width: 34px;
+    height: 34px;
     padding: 8px;
 }
 
@@ -213,7 +265,7 @@ ul.dropMenu li.drawType {
     }
 }
 
-#imageInput {
+#imageInput, .invisible, .inactive {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -221,10 +273,48 @@ ul.dropMenu li.drawType {
     z-index: -10;
 }
 
-#imageLabel {
+.pop-up {
+    opacity: 0;
+    z-index: -10;
+    transition: opacity 0.2s ease;
+    animation-duration: .3s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+}
+.anim {
+    animation-name: anim;
+}
+.reanim {
+    animation-name: reanim;
+}
+
+@keyframes reanim {
+    0% {
+        opacity: 1;
+        z-index: 10;
+    }
+    99% {
+        z-index: 10;
+    }
+    100% {
+        opacity: 0;
+        z-index: -10;
+    }
+}
+@keyframes anim {
+    0% {
+        opacity: 0;
+        z-index: 10;
+    }
+    100% {
+        opacity: 1;
+        z-index: 10;
+    }
+}
+
+#imageButton #imageLabel, #colorLabel, #fill_colorLabel {
     width: inherit;
     height: inherit;
-    content: url('image-icon.png');
     cursor: inherit;
 }
 
@@ -264,12 +354,343 @@ li#grey > div {
 li#black > div {
     background-color: var(--black);
 }
-li#beige > div {
-    background-color: var(--beige);
+li#blue > div {
+    background-color: var(--blue);
 }
 li#green > div {
     background-color: var(--green);
 }
-li#blue > div {
-    background-color: var(--blue);
+li#beige > div {
+    background-color: var(--beige);
 }
+
+/* ---------- Authorization system ---------- */
+
+.login {
+    width: 80%;
+    max-width: 800px;
+    max-height: 90%;
+    background-color: var(--button);
+    box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background-color .2s ease;
+    vertical-align: middle;
+}
+.login h1 {
+    text-align: center;
+    color: var(--text);
+    font-size: 28px;
+    padding: 20px 0 20px 0;
+    margin: 0;
+    border-bottom: 1px solid var(--buttonActive);
+    transition: color .2s ease;
+}
+.login form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 20px;
+}
+.login label, .login div p {
+    color: var(--text);
+    padding: 5px;
+    margin: 10px 0 0 0;
+    transition: color .2s ease;
+    font-size: 21px;
+}
+input[type="text"], input[type="password"], input[type="email"] {
+    width: 90%;
+    height: 55px;
+    font-size: 16px;
+    border: 0;
+    background-color: var(--buttonHover);
+    color: var(--text);
+    padding: 0 15px;
+    transition: background-color .2s ease;
+    transition: color .2s ease;
+    border-radius: 5px;
+}
+select {
+    height: 55px;
+    font-size: 16px;
+    border: 0;
+    background-color: var(--buttonHover);
+    color: var(--text);
+    padding: 0 15px;
+    transition: background-color .2s ease;
+    transition: color .2s ease;
+    border-radius: 5px;
+}
+.login a, .login button.link {
+    text-decoration: none;
+    text-align: center;
+    margin: 10px 10px 5px 10px;
+    padding: 5px;
+    font-weight: bold;
+    background-color: rgba(50,50,200,0.3);
+    border-radius: 4px;
+    color: var(--link);
+    transition: color .2s ease;
+}
+p#error, p.error {
+    text-align: center;
+    color: var(--error);
+    margin: 0;
+    margin: 5px 10px 10px 10px;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: color .2s ease;
+    transition: background-color .2s linear;
+}
+button#theme, button#createButton {
+    display: block;
+    position: relative;
+    left: 10px;
+    top: 10px;
+    width: 40px; 
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+}
+button#home, button#menu {
+    float: right;
+    display: block;
+    position: relative;
+    right: 10px;
+    top: 10px;
+    width: 40px; 
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+}
+.login input[type="submit"] {
+    width: 100%;
+    height: 55px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: var(--buttonActive);
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text);
+    transition: all .2s ease;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: var(--contrast);
+    }
+}
+.login div button#submit {
+    width: 90%;
+    height: 55px;
+    padding: 15px;
+    font-size: 20px;
+    background-color: var(--buttonActive);
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--text);
+    transition: all .2s ease;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: var(--contrast);
+    }
+}
+
+/* ---------- Home page ---------- */
+
+div#panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 80px;
+    background-color: var(--foreground);
+}
+div#tools {
+    float: left;
+    height: 100%;
+}
+div#account {
+    float: right;
+    height: 100%;
+}
+button#test {
+    width: 50px;
+    height: 50px;
+    border: 0;
+    border-radius: 12px;
+    background-color: var(--button);
+    margin: 10px;
+}
+div#panel, div#panel button, button#join, img#avatar {
+    transition: background-color .2s ease;
+}
+div.avatar label#imageLabel, div.username label#imageLabel, div.username button#usernameButton {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: var(--button);
+    margin: 10px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    color: var(--text);
+    font-weight: bold;
+    font-size: 20px;
+
+    &:hover {
+        background-color: var(--buttonHover);
+    }
+}
+p.username {
+    color: var(--text);
+    font-weight: bold;
+    font-size: 24px;
+    margin: 10px;
+    transition: color .2s ease;
+}
+div.desk p {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    transition: color .2s ease;
+}
+div.info div.separator {
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--contrast);
+    transition: background-color .2s ease;
+    height: 2px;
+    width: 100%;
+    margin: 10px 0 10px 0;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 4px 0px;
+}
+div.info h2 {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--text);
+    transition: color .2s ease;
+}
+div#content div.desk {
+    background-color: var(--buttonHover);
+    width: 80vw;
+    height: 55px;
+    border-radius: 5px;
+    margin: 10px; 
+}
+
+@media screen and (max-aspect-ratio: 1/1), (orientation: portrait) {
+    div#panel {
+        height: 160px;
+    }
+    div#panel button, div#panel input, div#panel img, div#panel label, button#theme, button#home, button#menu {
+        width: 70px;
+        height: 70px;
+        border-radius: 20px;
+        font-size: 30px;
+    }
+    div#panel p {
+        font-size: 40px;
+    }
+    input[type="text"], input[type="password"], input[type="email"] {
+        height: 80px;
+        font-size: 30px;
+        border-radius: 15px;
+    }
+    .login label, .login div p {
+        font-size: 30px;
+    }
+    .login h1 {
+        font-size: 36px;
+    }
+    .login a, .login button.link {
+        border-radius: 6px;
+        font-size: 24px;
+    }
+    div#content div.desk {
+        height: 80px;
+        border-radius: 12px;
+    }
+    div#content div.desk p {
+        font-size: 26px;
+    }
+    div#content div.desk button {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+    }
+    button#joinButton {
+        font-size: 24px;
+        height: 40px;
+        margin-top: 20px;
+    }
+}
+
+/* ----- Range slider ----- */
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    height: 10rem;
+  }
+  
+  /* Removes default focus */
+  input[type="range"]:focus {
+    outline: none;
+  }
+  
+  /******** Chrome, Safari, Opera and Edge Chromium styles ********/
+  /* slider track */
+  input[type="range"]::-webkit-slider-runnable-track {
+    background-color: #a3a3a3;
+    border-radius: 0.5rem;
+  }
+  
+  /* slider thumb */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    background-color: #4d4d4d;
+    border-radius: 0.75rem;
+    margin: -0.3rem;
+    margin-top: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  
+  /*
+  input[type="range"]:focus::-webkit-slider-thumb {
+    outline: 3px solid #4d4d4d;
+    outline-offset: 0.125rem;
+  }
+  */
+  
+  /*********** Firefox styles ***********/
+  /* slider track */
+  input[type="range"]::-moz-range-track {
+    background-color: #a3a3a3;
+    border-radius: 0.5rem;
+  }
+  
+  /* slider thumb */
+  input[type="range"]::-moz-range-thumb {
+    background-color: #4d4d4d;
+    border: none; /*Removes extra border that FF applies*/
+    border-radius: 0.5rem;
+    height: 1rem;
+    width: 1rem;
+  }
+  
+  /*
+  input[type="range"]:focus::-moz-range-thumb{
+    outline: 3px solid #4d4d4d;
+    outline-offset: 0.125rem;
+  }
+  */
