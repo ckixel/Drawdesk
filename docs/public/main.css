@@ -1,0 +1,275 @@
+:root{
+    --white: #e7e7e7;
+    --grey: #888b8d;
+    --black: #353535;
+    --beige: #ebe3db;
+    --green: #a3b18a;
+    --blue: #c3dde4;
+}
+body.theme_white {
+    --background: #eeeeee;
+    --foreground: #e7e7e7;
+    --text: #000000;
+    --button: #c5c5c5;
+    --buttonHover: #b4b4b4;
+    --buttonActive: #919191;
+}
+body.theme_grey {
+    --background: #a1a3a5;
+    --foreground: #888b8d;
+    --text: #000000;
+    --button: #676a6d;
+    --buttonHover: #525557;
+    --buttonActive: #3c3e41;
+}
+body.theme_black {
+    --background: #2c2c2c;
+    --foreground: #353535;
+    --text: #cccccc;
+    --button: #424242;
+    --buttonHover: #474747;
+    --buttonActive: #696969;
+}
+body.theme_beige {
+    --background: #e7e2dd;
+    --foreground: #dad0bf;
+    --text: #000000;
+    --button: #B0A695;
+    --buttonHover: #8f7d6a;
+    --buttonActive: #776B5D;
+}
+body.theme_green {
+    --background: #dad7cd;
+    --foreground: #a3b18a;
+    --text: #000000;
+    --button: #758f5d;
+    --buttonHover: #607e4d;
+    --buttonActive: #496b3f;
+}
+body.theme_blue {
+    --background: #e9f4f7;
+    --foreground: #c3dde4;
+    --text: #000000;
+    --button: rgb(154, 191, 197);
+    --buttonHover: #85afb8;
+    --buttonActive: #729ba3;
+}
+html {
+    overflow: hidden;
+}
+body {
+    background-color: #111111;
+}
+html, body{
+    margin: 0;
+    padding: 0
+}
+div#upperPanel {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    background-color: var(--foreground);
+    top: 0px;
+    transition: background-color .5s ease;
+}
+#upperText {
+    display: inline;
+    padding: 5px;
+    margin: 20px;
+    background-color: var(--button);
+    color: var(--text);
+    border-radius: 4px;
+    text-align: center;
+}
+.upperButton {
+    height: 40px;
+    width: 40px;
+    color: var(--text);
+    background-color: var(--button);
+    border: 0px;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 8px;
+    transition: background-color .1s ease-in-out;
+
+    &:hover {
+        background-color: var(--buttonHover);
+    }
+
+    &:focus {
+        background-color: #496b3f;
+    }
+
+    &:active {
+        background-color: var(--buttonActive);
+    }
+}
+#canvas {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: var(--background);
+    transition: background-color .5s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.options {
+    list-style: none;
+    padding: 0;
+    margin: 10px;
+    display: inline-block;
+    background-color: transparent;
+
+    > li {
+        float: left;
+        width: 40px;
+        height: 40px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color .2s ease-in-out;
+        transition: border-radius .2s ease-in-out;
+        background-color: var(--button);
+        margin: 10px;
+        border-radius: 8px;
+        padding: 10px;
+
+        &:hover{
+            background-color: var(--buttonHover);
+            border-radius: 8px 8px 8px 8px;
+        }
+        
+        &:hover:has(.dropMenu) {
+            background-color: var(--buttonHover);
+            border-radius: 8px 8px 0px 0px;
+        }
+        
+        &:active{
+            background-color: var(--buttonActive);      
+        }
+
+    }
+}
+
+
+ul.dropMenu {
+    position: absolute;
+    top: 100%;
+    left: 0%;
+    width: 100%;
+    padding: 0;
+  
+    > li {
+        background: var(--button);
+        color: rgba(255,255,255,0.7);
+
+        transition: opacity 1s ease-in-out;
+
+        &:hover {
+            background-color: var(--buttonHover);
+        }
+        &:active {
+            background-color: var(--buttonActive);
+        }
+        &:last-child {
+            border-radius: 0px 0px 5px 5px;
+            padding-bottom: 10px;
+        }
+        &:first-child {
+            padding-top: 10px;
+        }
+    }
+}
+
+ul.dropMenu li {
+    display: none;
+    padding: 5px 8px 5px 8px;
+    align-content:right;
+}
+li:hover > ul.dropMenu li {
+    display: block;
+    animation: anim 0.2s ease-in-out;
+}
+ul.dropMenu li.shape {
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+}
+ul.dropMenu li.drawType {
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+}
+
+@keyframes anim{
+    0%{
+        opacity: 0;
+        transform: rotateY(90deg);
+    }
+    100%{
+        opacity: 1;
+        transform: rotateY(0deg);
+    }
+}
+
+#imageInput {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    position: absolute;
+    z-index: -10;
+}
+
+#imageLabel {
+    width: inherit;
+    height: inherit;
+    content: url('image-icon.png');
+    cursor: inherit;
+}
+
+#space {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 20px;
+}
+
+#text {
+    float: left;
+    width: 100px;
+    height: 40px;
+    position: relative;
+    transition: background-color .2s ease-in-out;
+    transition: border-radius .2s ease-in-out;
+    background-color: var(--button);
+    cursor: auto;
+    margin: 10px;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: 'Times New Roman', Arial;
+    font-size: x-large;
+}
+
+.themeColor > div{
+    border-radius: 3px;
+    height: 25px;
+}
+li#white > div {
+    background-color: var(--white);
+}
+li#grey > div {
+    background-color: var(--grey);
+}
+li#black > div {
+    background-color: var(--black);
+}
+li#beige > div {
+    background-color: var(--beige);
+}
+li#green > div {
+    background-color: var(--green);
+}
+li#blue > div {
+    background-color: var(--blue);
+}
