@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="user-scalable=0">
+		
+		<script language="JavaScript" type="text/javascript" src="jquery-3.7.1.min.js"></script>
+
+		<link type="text/css" rel="stylesheet" href="C:/Dev/Server/main.css">
+		<link type="text/css" rel="stylesheet" href="/main.css">
+		<script src="https://kit.fontawesome.com/206d7bad7d.js" crossorigin="anonymous"></script>
+
+		<title>Account</title>
+	</head>
+	<body>
+		<div id="panel" style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
+			<div id="tools" style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
+				<button style="position: static;" id="theme" onclick="theme = (theme == 'white') ? 'black' : 'white'; document.body.className = 'theme_' + theme; localStorage.setItem('mainTheme', theme)"><img style="width: inherit; height: inherit;" src="public/theme-icon.png"></button>
+			</div>
+			<div id="account" style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
+				<p class="username">Username</p>
+				<img onclick="replace('/home')" class="avatar button" src="/public/user-icon.png" style="padding: 5px;">
+			</div>
+		</div>
+		<div id="content" style="display: flex; justify-content: center; align-items: center; flex-direction: column; height: 100vh;">
+			<div class="info" style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; border-radius: 10px; background: var(--foreground); min-width: 300px; max-width: 90vw;">
+				<h2 style="font-size: 5vmin;">Avatar</h2>
+				<div class="avatar" style="display: inline-flex; justify-content: center; align-items: center; flex-direction: row;">
+					<img class="avatar" src="/public/user-icon.png" style="width: 30vmin; height: 30vmin; border-radius: 10px;">
+					<div><label for="imageInput" id="imageLabel" style="display: inline-block; width: 20vmin; height: 6vmin; display: flex; justify-content: center; align-items: center; font-size: 3vmin;">Загрузить</label></div>
+					<input type="file" id="imageInput" accept="image/*" style="width: inherit; height: inherit;">
+				</div>
+				<div class="separator"></div>
+				<h2 style="font-size: 5vmin;">Username</h2>
+				<div class="username" style="display: inline-flex; justify-content: center; align-items: center; flex-direction: row;">
+					<p class="username" style="font-size: 4vmin;">Username</p>
+					<button for="imageInput" id="usernameButton" style="display: inline-block; width: 20vmin; height: 6vmin; display: flex; justify-content: center; align-items: center; font-size: 3vmin;">Изменить</button>
+				</div>
+			</div>
+		</div>
+		
+		<script>
+			function replace(url) {
+				window.location.href = url
+			}
+			
+			theme = localStorage.getItem("mainTheme") || 'white'
+			document.body.className = "theme_" + theme
+
+			$(document).ready(() => {
+
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', '/account/info', true)
+				xhr.send()
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState != 4) return
+					if (xhr.status == 200) {
+						json = JSON.parse(xhr.responseText)
+						if (!json.loggedin) {
+							replace('./auth')
+						}
+						else {
+							Array.from(document.getElementsByClassName("username")).forEach((el) => {
+								if (el.tagName == "P") el.innerHTML = json.username
+							})
+							if (json.avatar) Array.from(document.getElementsByClassName("avatar")).forEach((el) => {
+								if (el.tagName == "IMG") el.src = json.avatar
+							})
+						}
+					}
+					else {
+						console.error("Error " + xhr.status + ": " + xhr.statusText)
+					}
+					Array.from(document.getElementsByClassName("avatar")).forEach((el) => {
+						if (el.tagName == "IMG" && !el.src) el.src = "public/user-icon.png"
+					})
+				}
+			})
+
+			document.getElementById("usernameButton").onclick = () => {
+				let username = prompt("Новое имя:")
+				Array.from(document.getElementsByClassName("username")).forEach((el) => {
+					if (el.tagName == "P") {
+						el.innerHTML = username
+					}
+				})
+				xhr = new XMLHttpRequest()
+				xhr.open('POST', '/account/username', true)
+				xhr.setRequestHeader("Content-type", "application/json")
+				xhr.send(JSON.stringify({username: username}))
+			}
+
+			document.getElementById("imageInput").onchange = () => {
+				var file = document.getElementById("imageInput").files[0]
+				
+				const reader = new FileReader()
+				
+				reader.onload = function (event) {
+					Array.from(document.getElementsByClassName("avatar")).forEach((el) => {
+						if (el.tagName == "IMG") el.src = event.target.result
+						xhr = new XMLHttpRequest()
+						xhr.open('POST', '/account/avatar', true)
+						xhr.setRequestHeader("Content-type", "application/json")
+						xhr.send(JSON.stringify({avatar: event.target.result}))
+					})
+				}
+				
+				reader.readAsDataURL(file)
+        	}
+		</script>
+	</body>
+</html>

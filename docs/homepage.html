@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="user-scalable=0">
+		
+		<script language="JavaScript" type="text/javascript" src="jquery-3.7.1.min.js"></script>
+
+		<link type="text/css" rel="stylesheet" href="C:/Dev/Server/main.css">
+		<link type="text/css" rel="stylesheet" href="/main.css">
+		<script src="https://kit.fontawesome.com/206d7bad7d.js" crossorigin="anonymous"></script>
+
+		<title>Home</title>
+	</head>
+	<body>
+		<div class="pop-up" id="create" style="position: absolute; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; position: fixed;">
+			<div onclick="document.getElementById('create').classList.remove('anim') ; document.getElementById('create').classList.add('reanim')" style="position: absolute; background: rgba(0,0,0,0.5); width: 100vw; height: 100vh; z-index: 80;"></div>
+			<div style="position: absolute; background: var(--foreground); width: 50vw; height: 50vh; z-index: 100; border-radius: 10px; padding: 20px; display: flex; justify-content:start; align-items: center; flex-direction: column;">
+				<p style="font-size: 5vmin; font-weight: 1000; margin: 30px; color: var(--text);">Create desk</p>
+				<select style="width: 50%; height: 30px;" name="accessibility" id="accessibility" onchange="if(this.value === 'public') { $('#passInputAdd').addClass('inactive') } else $('#passInputAdd').removeClass('inactive')">
+					<option value="private">Private</option>
+					<option value="public">Public</option>
+				</select><br/>
+				<input type="text" id="nameInputAdd" placeholder="Desk" style="width: 80%; height: 50px; font-size: 30px;"/><br/>
+				<input type="password" id="passInputAdd" placeholder="Password" style="width: 80%; height: 50px; font-size: 30px;"/>
+				<button id="joinButton" style="width: auto;" onclick="createDesk($('#nameInputAdd').val(), $('#passInputAdd').val())">Создать</button>
+				<p class="error"></p>	
+			</div>
+		</div>
+		<div class="pop-up" id="share" style="position: absolute; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; position: fixed;">
+			<div onclick="document.getElementById('share').classList.remove('anim') ; document.getElementById('share').classList.add('reanim')" style="position: absolute; background: rgba(0,0,0,0.5); width: 100vw; height: 100vh; z-index: 80;"></div>
+			<div style="position: absolute; background: var(--foreground); width: 80vw; height: 50vh; z-index: 100; border-radius: 10px; padding: 20px; display: flex; justify-content:start; align-items: center; flex-direction: column;">
+				<p style="font-size: 5vmin; font-weight: 1000; margin: 30px; color: var(--text);">Share</p>
+				<div style="display: flex; justify-content: center; align-items: center; flex-direction: row; width: 100%; height: 100%;">
+					<p id="desk_link" style="overflow: hidden; max-width: 80%; font-size: 25px; background-color: var(--button); border-radius: 10px; height: 40px; line-height: 40px; color: var(--text); padding: 0 10px;">https://drawdesk.ru</p>
+					<button onclick="navigator.clipboard.writeText(document.getElementById('desk_link').innerHTML)" style="display: flex; justify-content: center; align-items: center;"><i style="font-size: 30px;" class="fa-regular fa-clipboard"></i></button>
+				</div>
+				<div style="display: flex; justify-content: center; align-items: center; flex-direction: row; width: 100%; height: 100%; overflow: hidden;">
+					<a class="button" style="width: 30px; height: 30px;" href="https://www.facebook.com/sharer.php?u=https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-facebook"></i></a>
+					<a class="button" style="width: 30px; height: 30px;" href="https://twitter.com/intent/tweet?text=Title. Description. https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-twitter"></i></a>
+					<a class="button" style="width: 30px; height: 30px;" href="https://telegram.me/share/url?url=https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-telegram"></i></a>
+					<a class="button" style="width: 30px; height: 30px;" href="https://vk.com/share.php?url=https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-vk"></i></a>
+					<a class="button" style="width: 30px; height: 30px;" href="https://reddit.com/submit?url=https://drawdesk.ru&title=Title" target="_blank"><i style="font-size: 30px;" class="fab fa-reddit"></i></a>
+				</div>
+				<p class="error"></p>	
+			</div>
+		</div>
+		<div id="panel" style="display: flex; justify-content: space-between; align-items: center; flex-flow: row; position: fixed; z-index: 5;">
+			<div id="tools" style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
+				<button style="position: static;" id="theme" onclick="theme = (theme == 'white') ? 'black' : 'white'; document.body.className = 'theme_' + theme; localStorage.setItem('mainTheme', theme)"><img style="width: inherit; height: inherit;" src="public/theme-icon.png"></button>
+				<button id="createButton" onclick="document.getElementById('create').classList.remove('reanim') ; document.getElementById('create').classList.add('anim')" style="position: static; padding: 5px; margin: 10px;"><img style="width: 100%; height: 100%;" src="public/create-icon.png"></button>
+			</div>
+			<div id="account" style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
+				<p class="username" class="private inactive">Username</p>
+				<img onclick="replace('/account')" class="private inactive avatar button" id="avatar" src="/public/user-icon.png" style="padding: 5px;">
+				<button onclick="replace('/reg')" class="public inactive" style="display: inline-block; width: auto;">Регистрация</button>
+				<button onclick="replace('/auth')" class="public inactive" style="display: inline-block; width: auto;">Вход</button>
+			</div>
+		</div>
+		<div id="content" style="display: flex; justify-content: start; align-items: center; flex-direction: column; height: auto; position: relative; top: 10vh;">
+			<h1 style="font-size: 15vmin; color: var(--text); margin: 20px;">Проект</h1>
+			<div class="private inactive1" id="desks" style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; border-radius: 10px; background: var(--foreground); min-width: 300px; width: 85vw;">
+				<input type="text" id="joinInput" placeholder="Enter name" style="width: 90%; height: 50px; font-size: 30px;"/>
+				<button id="joinButton" style="width: auto; font-size: 16px; margin: 10px;" onclick="replace('/desk/' + document.getElementById('joinInput').value)">Присоединиться</button>
+			</div>
+		</div>
+		
+		<script>
+			var desks = []
+
+			function replace(url) {
+				window.location.href = url
+			}
+
+			function share(i) {
+				desk = desks[i].name
+				document.getElementById('share').classList.remove('reanim') ; document.getElementById('share').classList.add('anim')
+				document.getElementById('desk_link').innerHTML = window.location.origin + '/desk/' + desk
+			}
+
+			function start(i) {
+				desk = desks[i].name
+				window.location.href = window.location.origin + '/desk/' + desk
+			}
+
+			function createElementFromHTML(htmlString) {
+				var div = document.createElement('div');
+				div.innerHTML = htmlString.trim();
+
+				return div.firstChild;
+			}
+
+			function createDeskElement(i) {
+				let el = createElementFromHTML(`
+				<div class="desk" style="display: flex; justify-content:space-between; align-items: center; flex-direction: row; padding: 0 2.5vw;">
+					<p></p>
+					<div>
+						<button title="Open" style="display: flex; justify-content: center; align-items: center;" onclick="start(${i})"><img src="public/open-icon.png" style="width: inherit; height: inherit;"></button>
+						<button title="Share" style="display: flex; justify-content: center; align-items: center;" onclick="share(${i})"><img src="public/share-icon.png" style="width: inherit; height: inherit;"></button>
+						<button title="Settings" style="display: flex; justify-content: center; align-items: center;" onclick="settings(${i})"><img src="public/settings-icon.png" style="width: inherit; height: inherit;"></button>
+					</div>
+				</div>`)
+				document.getElementById("desks").appendChild(el)
+				return el
+			}
+
+			function createDesk(name, pass) {
+				if (!name) {
+					console.error('Empty name!')
+					$('.error').html("<i class='fa-solid fa-circle-exclamation'></i> " + 'Empty name or password!')
+					$('.error').css('background', 'rgba(200,0,0,0.5)')
+					setTimeout(function() { $('.error').css('background', 'rgba(200,50,50,0.3)') }, 200)
+					return
+				}
+				xhr = new XMLHttpRequest()
+				xhr.open('POST', '/desk', true)
+				xhr.setRequestHeader("Content-type", "application/json")
+				xhr.responseType = 'json'
+				xhr.send(JSON.stringify({name: name, password: pass}))
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState != 4) return
+					if (xhr.status == 200) {
+						if (xhr.response.err) {
+							console.error(xhr.response.err)
+							$('.error').html("<i class='fa-solid fa-circle-exclamation'></i> " + xhr.response.err)
+							$('.error').css('background', 'rgba(200,0,0,0.5)')
+							setTimeout(function() { $('.error').css('background', 'rgba(200,50,50,0.3)') }, 200)
+						}
+						else replace('/desk/' + name)
+					}
+					else {
+						console.error("Error " + xhr.status + ": " + xhr.statusText)
+					}
+				}
+			}
+
+			theme = localStorage.getItem("mainTheme") || 'white'
+			document.body.className = "theme_" + theme
+
+			$(document).ready(() => {
+				$('.error').html("")
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', '/account/info', true)
+				xhr.send()
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState != 4) return
+					if (xhr.status == 200) {
+						json = JSON.parse(xhr.responseText)
+						if (!json.loggedin) {
+							$('.public').removeClass('inactive')
+						}
+						else {
+							Array.from(document.getElementsByClassName("username")).forEach((el) => { if (el.tagName == "P") el.innerHTML = json.username })
+							if (json.avatar) document.getElementById("avatar").src = json.avatar
+							$('.private').removeClass('inactive')
+							desks = JSON.parse(json.desks).desks
+							let i = 0
+							desks.forEach((desk) => {
+								let el = createDeskElement(i)
+								el.children[0].innerHTML = desk.name
+								i++
+							})
+						}
+					}
+					else {
+						console.error("Error " + xhr.status + ": " + xhr.statusText)
+					}
+					if (!document.getElementById("avatar").src) document.getElementById("avatar").src = "public/user-icon.png"
+				}
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+
+    <script language="JavaScript" type="text/javascript" src="/jquery-3.7.1.min.js"></script>
+
+    <title>Test</title>
+
+    <meta name="viewport" content="user-scalable=0">
+    
+    <script src="https://kit.fontawesome.com/206d7bad7d.js" crossorigin="anonymous"></script>
+
+    <link type="text/css" rel="stylesheet" href="/main.css" id="theme">
+    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+</head>
+<body>
+    <div class="pop-up" id="share" style="position: absolute; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; position: fixed;">
+        <div onclick="document.getElementById('share').classList.remove('anim') ; document.getElementById('share').classList.add('reanim')" style="position: absolute; background: rgba(0,0,0,0.5); width: 100vw; height: 100vh; z-index: 80;"></div>
+        <div style="position: absolute; background: var(--foreground); width: 80vw; height: 50vh; z-index: 100; border-radius: 10px; padding: 20px; display: flex; justify-content:start; align-items: center; flex-direction: column;">
+            <p style="font-size: 5vmin; font-weight: 1000; margin: 30px; color: var(--text);">Share</p>
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: row; width: 100%; height: 100%;">
+                <p id="desk_link" style="overflow: hidden; max-width: 80%; font-size: 25px; background-color: var(--button); border-radius: 10px; height: 40px; line-height: 40px; color: var(--text); padding: 0 10px;">https://drawdesk.ru</p>
+                <button onclick="navigator.clipboard.writeText(document.getElementById('desk_link').innerHTML)" style="display: flex; justify-content: center; align-items: center;"><i style="font-size: 30px;" class="fa-regular fa-clipboard"></i></button>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; flex-direction: row; width: 100%; height: 100%; overflow: hidden;">
+                <a class="button" style="width: 30px; height: 30px;" href="https://www.facebook.com/sharer.php?u=https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-facebook"></i></a>
+                <a class="button" style="width: 30px; height: 30px;" href="https://twitter.com/intent/tweet?text=Title. Description. https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-twitter"></i></a>
+                <a class="button" style="width: 30px; height: 30px;" href="https://telegram.me/share/url?url=https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-telegram"></i></a>
+                <a class="button" style="width: 30px; height: 30px;" href="https://vk.com/share.php?url=https://drawdesk.ru" target="_blank"><i style="font-size: 30px;" class="fab fa-vk"></i></a>
+                <a class="button" style="width: 30px; height: 30px;" href="https://reddit.com/submit?url=https://drawdesk.ru&title=Title" target="_blank"><i style="font-size: 30px;" class="fab fa-reddit"></i></a>
+            </div>
+            <p class="error"></p>	
+        </div>
+    </div>
+    <input class="invisible" type="text" id="mobileInput"/>
+    <div id="upperPanel">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-flow: row;">
+            <div class="options">
+                <li title="Cursor" id="cursorButton">
+                    <img style="width: inherit; height: inherit;" src="/public/cursor-icon.png">
+                </li>
+                <li title="Hand" id="handButton">
+                    <img style="width: inherit; height: inherit;" src="/public/hand-icon.png">
+                </li>
+                <li id="drawButton">
+                    <img id="drawButtonImg" style="width: inherit; height: inherit;" src="/public/pen-icon.png">
+                    <ul class="dropMenu">
+                        <li title="Pen" class="drawType" id="pen" style="content: url('/public/pen-icon.png');"></li>
+                        <li title="Line" class="drawType" id="line" style="content: url('/public/line-icon.png');"></li>
+                        <!-- <li title="Dotted line" class="drawType" id="dotted_line" style="content: url('/public/dotted_line-icon.png');"></li> -->
+                        <li title="Filling pen" class="drawType" id="filling_pen" style="content: url('/public/filling_pen-icon.png');"></li>
+                    </ul>
+                </li>
+                <li id="eraserButton">
+                    <img id="modifyButtonImg" style="width: inherit; height: inherit;" src="/public/eraser-icon.png">
+                    <ul class="dropMenu">
+                        <li title="Eraser" class="modifyType" id="eraser" style="content: url('/public/eraser-icon.png');"></li>
+                        <li title="Line eraser" class="modifyType" id="line_eraser" style="content: url('/public/line_eraser-icon.png');"></li>
+                        <li title="Finger" class="modifyType" id="finger" style="content: url('/public/finger-icon.png');"></li>
+                    </ul>
+                </li>
+                <li id="shapeButton">
+                    <img id="shapeButtonImg" style="width: inherit; height: inherit;" src="/public/rectangle-icon.png">
+                    <ul class="dropMenu">
+                        <li title="Rectangle" class="shape" id="rectangle" style="content: url('/public/rectangle-icon.png');"></li>
+                        <li title="Ellipse" class="shape" id="ellipse" style="content: url('/public/circle-icon.png');"></li>
+                        <li title="Filling rectangle" class="shape" id="filling_rectangle" style="content: url('/public/filling_rectangle-icon.png');"></li>
+                        <li title="Filling ellipse" class="shape" id="filling_ellipse" style="content: url('/public/filling_circle-icon.png');"></li>
+                    </ul>
+                </li>
+                <li title="Text" id="textButton">
+                    <img style="width: inherit; height: inherit;" src="/public/text-icon.png">
+                </li>
+                <li id="imageButton">
+                    <input type="file" id="imageInput" accept="image/*">
+                    <label for="imageInput" id="imageLabel" style="content: url('/public/image-icon.png')"></label>
+                </li>
+                <li title="Clean" id="trashcanButton">
+                    <img style="width: inherit; height: inherit;" src="/public/trashcan-icon.png">
+                </li>
+                <li id="minusButton">
+                    <img  title="Zoom out" style="width: inherit; height: inherit;" src="/public/minus-icon.png">
+                </li>
+                <li id="plusButton">
+                    <img title="Zoom in" style="width: inherit; height: inherit;" src="/public/plus-icon.png">
+                </li>
+                <li id="colorButton">
+                    <img title="Color" style="width: inherit; height: inherit;" src="/public/color-icon.png">
+                    <ul class="dropMenu">
+                        <li title="Outline color" class="color" id="outline_color">
+                            <input class="invisible" type="color" id="colorInput" onchange="color = $(this).val();" oninput="$('#colorLabel').css('background-color', avColor($(this).val(), window.getComputedStyle(document.body).getPropertyValue('--button')))">
+                            <label for="colorInput" id="colorLabel" style="display: block; border-radius: 5px; content: url('/public/outline_color-icon.png')"></label>
+                        </li>
+                        <li title="Fill color" class="color" id="fill_color">
+                            <input class="invisible" type="color" id="fillColorInput" onchange="fill_color = $(this).val();" oninput="$('#fill_colorLabel').css('background-color', avColor($(this).val(), window.getComputedStyle(document.body).getPropertyValue('--button')))">
+                            <label for="fillColorInput" id="fill_colorLabel" style="display: block; border-radius: 5px; content: url('/public/fill_color-icon.png')"></label>
+                        </li>
+                    </ul>
+                </li>
+                <li id="widthButton">
+                    <img style="width: inherit; height: inherit;" src="/public/size-icon.png">
+                    <ul class="dropMenu">
+                        <li><input type="range" id="widthSlider" class="styledSlider" oninput="$('#widthValue').html($(this).val() + 'px')" onchange="lineWidth = $(this).val();" style="writing-mode: vertical-rl;" min="1" max="70" value="3" step="1"/></li>
+                        <li><p id="widthValue" style="margin: 2px; color: var(--text); font-weight: bold;">3px</p></li>
+                    </ul>
+                </li>
+                <!--
+                <li id="debugButton">
+                    <img style="width: inherit; height: inherit;" src="/public/bug-icon.png">
+                </li>
+                -->
+            </div>
+            <div class="options">
+                <li title="Share" style="display: flex; justify-content: center; align-items: center;" onclick="share()"><img src="/public/share-icon.png" style="width: inherit; height: inherit;"></li>
+                <li id="themeButton">
+                    <img style="width: inherit; height: inherit;" src="/public/theme-icon.png">
+                    <ul class="dropMenu">
+                        <li class="themeColor" id="white"><div></div></li>
+                        <li class="themeColor" id="grey"><div></div></li>
+                        <li class="themeColor" id="black"><div></div></li>
+                        <li class="themeColor" id="blue"><div></div></li>
+                        <li class="themeColor" id="green"><div></div></li>
+                        <li class="themeColor" id="beige"><div></div></li>
+                    </ul>
+                </li>
+                <li id="settingsButton">
+                    <img style="width: inherit; height: inherit;" src="/public/settings-icon.png">
+                    <ul class="dropMenu">
+                        <li class="settingsType" id="gridButton">
+                            <img style="width: inherit; height: inherit;" src="/public/grid-icon.png">
+                        </li>
+                        <li class="settingsType" id="panelButton">
+                            <img style="width: inherit; height: inherit;" src="/public/panel-icon.png">
+                        </li>
+                    </ul>
+                </li>
+                <li title="Home" id="menuButton">
+                    <img style="width: inherit; height: inherit;" src="/public/menu-icon.png">
+                </li>
+            </div>
+        </div>
+    </div>
+    <canvas id="canvas" width="1920" height="1080"></canvas>
+
+    <script>
+        var xhr = new XMLHttpRequest()
+        var urlSearch = new URLSearchParams()
+
+        function uuidv4() {
+            return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            )
+        }
+
+        function share(i) {
+            document.getElementById('share').classList.remove('reanim') ; document.getElementById('share').classList.add('anim')
+            document.getElementById('desk_link').innerHTML = window.location.origin + '/desk/' + desk
+        }
+
+        function avColor(x, y) {
+            result = '#'
+            a = Math.round((parseInt(x.slice(1,3), 16) + parseInt(y.slice(1,3), 16)) / 2).toString(16)
+            result += (a.length == 1) ? '0' + a : a
+            a = Math.round((parseInt(x.slice(3,5), 16) + parseInt(y.slice(3,5), 16)) / 2).toString(16)
+            result += (a.length == 1) ? '0' + a : a
+            a = Math.round((parseInt(x.slice(5,7), 16) + parseInt(y.slice(5,7), 16)) / 2).toString(16)
+            result += (a.length == 1) ? '0' + a : a
+            return result
+        }
+
+        var paintMode = 'cursor'
+        var savedModes = {}
+        var themes = ['white', 'grey', 'black', 'beige', 'green', 'blue']
+        var theme = themes[0]
+
+        document.getElementById("cursorButton").onclick = () => {
+            paintMode = 'cursor'
+            document.getElementById("canvas").style.cursor = "default"
+        }
+        document.getElementById("handButton").onclick = () => {
+            paintMode = 'hand'
+            document.getElementById("canvas").style.cursor = "grab"
+        }
+        document.getElementById("drawButton").onclick = () => {
+            paintMode = savedModes['drawType'] || 'pen'
+            document.getElementById("canvas").style.cursor = "crosshair"
+        }
+        document.getElementById("eraserButton").onclick = () => {
+            paintMode = savedModes['modifyType'] || 'eraser'
+            document.getElementById("canvas").style.cursor = "crosshair"
+        }
+        document.getElementById("shapeButton").onclick = () => {
+            paintMode = savedModes['shape'] || 'rectangle'
+            document.getElementById("canvas").style.cursor = "crosshair"
+        }
+        document.getElementById("textButton").onclick = () => {
+            paintMode = 'text'
+            document.getElementById("canvas").style.cursor = "text"
+        }
+        document.getElementById("gridButton").onclick = () => {
+            bg = 1 - bg
+            localStorage.setItem("grid", bg)
+            redraw()
+        }
+        document.getElementById("panelButton").onclick = () => {
+            panel = 1 - panel
+            localStorage.setItem("panel", panel)
+            if (panel == 0) document.getElementById("upperPanel").style["background"] = ''
+            else if (panel == 1) document.getElementById("upperPanel").style["background"] = 'transparent'
+        }
+        document.getElementById("trashcanButton").onclick = () => {
+            if (confirm('Are you sure?')) {
+                wsc.send(JSON.stringify({clear: true, desk: desk}))
+                lines = []
+                texts = {}
+                imgs = {}
+                tempLines = []
+                selectedImg = -1
+                selectedText = -1
+            }
+        }
+        document.getElementById("minusButton").onclick = () => {
+            zoom = Math.min(Math.max((Math.sqrt(zoom) + 1) ** 2, 16), 1024)
+            redraw()
+        }
+        document.getElementById("plusButton").onclick = () => {
+            zoom = Math.min(Math.max((Math.sqrt(zoom) - 1) ** 2, 16), 1024)
+            redraw()
+        }
+        document.getElementById("menuButton").onclick = () => {
+            window.location.href = "/home"
+        }
+        for(let el of document.getElementsByClassName("drawType")){
+            el.onclick = () => {
+                document.getElementById("drawButtonImg").style.content = el.style.content
+                paintMode = el.id
+                savedModes['drawType'] = paintMode
+            }
+        }
+        for(let el of document.getElementsByClassName("shape")){
+            el.onclick = () => {
+                document.getElementById("shapeButtonImg").style.content = el.style.content
+                paintMode = el.id
+                savedModes['shape'] = paintMode
+            }
+        }
+        for(let el of document.getElementsByClassName("modifyType")){
+            el.onclick = () => {
+                document.getElementById("modifyButtonImg").style.content = el.style.content
+                paintMode = el.id
+                savedModes['modifyType'] = paintMode
+            }
+        }
+        for(let el of document.getElementsByClassName("themeColor")){
+            el.onclick = changeTheme.bind(null, el.id)
+        }
+        function changeTheme(theme) {
+            document.body.className = "theme_" + theme
+            localStorage.setItem("theme", theme)
+        }
+
+        var lastPaintMode = paintMode
+        var pressed = false
+        var bg = 0
+        var startPoint = [0, 0]
+        var lastPoint = [0, 0]
+        var cam = [0, 0]
+        var pos = [0, 0]
+        var linesToSend = []
+        var linesBeforeSend = []
+        var tempLine = []
+        var tempLineId = uuidv4()
+        var tempLines = []
+        var lines = []
+        var line = []
+        var imgs = {}
+        var texts = {}
+        var selectedImg = -1
+        var scalingMode = -1
+        var selectedText = -1
+        var lastLineId = undefined
+        var t = 0
+        var zoom = 100
+        var button = 0
+        var touches = []
+        var readyToSend = true
+        var w = 0
+        var h = 0
+        var eraserSize = 20
+        var lineWidth = 3
+        var color = '#000000'
+        var fill_color = '#000000'
+        var desk = window.location.href.split('/')[window.location.href.split('/').length - 1].split('?')[0]
+
+        const wsc = new WebSocket(`wss://${window.location.host}:8888`)
+
+        wsc.onmessage = function (message) {
+            json = JSON.parse(message.data)
+            if(json.del == true) {
+                lines.forEach(line => {
+                    for(let i = 1; i < line.length; i++) {
+                        let p = line[i]
+                        if(p[0] == json.line[0][0] && p[1] == json.line[0][1]) {
+                            let index = line.indexOf(p)
+                            line.splice(index, 1)
+                            lines.push(line.splice(0, index))
+                        }
+                    }
+                })
+            }
+            else if (json.line) {
+                lines.push(json.line)
+            }
+            if (json.text) {
+                let del = false
+                text = texts[json.text.id]
+                if (text) {
+                    if (json.text.text) text.text = json.text.text
+                    if (json.text.text == '') del = true
+                    if (json.text.x) text.x = json.text.x
+                    if (json.text.y) text.y = json.text.y
+                    if (json.text.size) text.size = json.text.size
+                }
+                else if (json.text.text) texts[json.text.id] = json.text
+                if (del) delete texts[json.text.id]
+            }
+            if (json.image) {
+                let del = false
+                image = imgs[json.image.id]
+                if (image) {
+                    if (json.image.src === '') del = true
+                    if (json.image.x) image.x = json.image.x
+                    if (json.image.y) image.y = json.image.y
+                    if (json.image.width) image.width = json.image.width
+                    if (json.image.height) image.height = json.image.height
+                }
+                else if (json.image.src) {
+                    let img = new Image()
+                    img.src = json.image.src
+                    img.onload = () => {
+                        let image = {
+                            img: img,
+                            x: json.image.x,
+                            y: json.image.y,
+                            width: json.image.width,
+                            height: json.image.height,
+                            id: json.image.id
+                        }
+                        imgs[image.id] = image
+                        redraw()
+                    }
+                }
+                if (del) {
+                    delete imgs[json.image.id]
+                    redraw()
+                }
+            }
+            if (json.tempLine && json.tempLine.line) {
+                let f = false
+                tempLines.forEach((l) => {
+                    if (l.id == json.tempLine.id) {
+                        if (json.tempLine.line) tempLines[tempLines.indexOf(l)].line = json.tempLine.line
+                        f = true
+                    }
+                })
+                if (!f && json.tempLine.line) tempLines.push(json.tempLine)
+            }
+            if (json.erase) {
+                erase({x: json.erase.x, y: json.erase.y})
+            }
+            if (json.line_erase) {
+                line_erase({x: json.line_erase.x, y: json.line_erase.y})
+            }
+            if (json.undo) {
+                for(let i = 0; i < lines.length; i++) {
+                    if (lines[i][0] != undefined) {
+                        if (lines[i][0].id == json.undo.lineId) {
+                            lines.splice(i, 1)
+                            redraw()
+                            break
+                        }
+                    }
+                }
+                for(let i = 0; i < tempLines.length; i++) {
+                    if (tempLines[i].id == json.undo.tempLineId) {
+                        tempLines.splice(i, 1)
+                        redraw()
+                        break
+                    }
+                }
+            }
+            if (json.clear){
+                lines = []
+                texts = {}
+                imgs = {}
+                tempLines = []
+                selectedImg = -1
+                selectedText = -1
+            }
+            redraw()
+        }
+
+        function firstCall() {
+            if (wsc.readyState == 1) wsc.send(JSON.stringify({desk: desk}))
+            else {
+                setTimeout(firstCall, 100)
+            }
+        }
+
+        window.addEventListener('resize', resize, true)
+
+        var canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext("2d")
+
+        var uiScale = 10 * window.devicePixelRatio
+        $(document).ready(() => {
+            resize()
+            theme = localStorage.getItem("theme") || 'white'
+            document.body.className = "theme_" + theme
+            bg = localStorage.getItem("grid") || 0
+            panel = localStorage.getItem("panel") || 0
+            if (panel == 0) document.getElementById("upperPanel").style["background"] = ''
+            else if (panel == 1) document.getElementById("upperPanel").style["background"] = 'transparent'
+            ctx.lineCap = "round"
+            ctx.lineJoin = "round"
+            ctx.fillStyle = "rgba(0, 0, 255, 0.2)"
+            cam = [-canvas.width / 2, -canvas.height / 2]
+            w = canvas.width
+            h = canvas.height
+            firstCall()
+
+            xhr.open("GET", '/desk/info/' + (desk), true)
+            xhr.onload = () => {
+                res = JSON.parse(xhr.response)
+                if (res.lines) lines = JSON.parse(res.lines).lines
+                if (lines == '') lines = []
+                if (res.texts) texts = res.texts
+                if (res.images) {
+                    imgs = res.images
+                    for (let id in imgs) {
+                        image = imgs[id]
+                        let img = new Image()
+                        img.src = image.src
+                        image.img = img
+                        img.onload = () => {
+                            redraw()
+                        }
+                    }
+                }
+                redraw()
+            }
+            xhr.send()
+            setTimeout(() => {redraw()}, 100) 
+        })
+
+        $(window).focus(function() {
+            //
+        })
+
+        $(window).blur(function() {
+            //
+        })
+
+        function localPosition(globalPosition){
+            return [Math.floor(10 * ((globalPosition[0] - (cam[0] + canvas.width / 2)) * 100 / zoom + canvas.width / 2)) / 10, Math.floor(10 * ((globalPosition[1] - (cam[1] + canvas.height / 2)) * 100 / zoom + canvas.height / 2)) / 10]
+        }
+        function globalPosition(localPosition){
+            return [Math.floor(10 * ((localPosition[0] - canvas.width / 2) * zoom / 100 + cam[0] + canvas.width / 2)) / 10, Math.floor(10 * ((localPosition[1] - canvas.height / 2) * zoom / 100 + cam[1] + canvas.height / 2)) / 10]
+        }
+
+        document.addEventListener("wheel", (e) => {
+            zoom = Math.min(Math.max((Math.sqrt(zoom) + e.deltaY / 100) ** 2, 16), 1024)
+            redraw()
+        })
+        
+        canvas.onmousemove = mouseMove
+        canvas.onmousedown = mouseDown
+        canvas.onmouseup = mouseUp
+        canvas.onmouseout = mouseOut
+        
+        function resize(){
+            canvas.width = $(window).width()
+            canvas.height = $(window).height()
+            ctx.lineCap = "round"
+            ctx.lineJoin = "round"
+            ctx.fillStyle = "rgba(0, 0, 255, 0.2)"
+            ctx.textBaseline = "bottom"
+            redraw()
+        }
+
+        function erase(e) {
+            if (e.pageX) e.x = globalPosition([e.pageX, e.pageY])[0]
+            if (e.pageY) e.y = globalPosition([e.pageX, e.pageY])[1]
+            lines.forEach(line => {
+                for(let i = 1; i < line.length; i++) {
+                    let p = line[i]
+                    if(Math.pow(p[0] - e.x, 2) + Math.pow(p[1] - e.y, 2) < (0.2 * zoom) ** 2 ){
+                        let index = line.indexOf(p)
+                        line.splice(index, 1)
+                        lines.push([line[0]].concat(line.splice(index, line.length - index)))
+                    }
+                }
+            })
+        }
+
+        function line_erase(e) {
+            if (e.pageX) e.x = globalPosition([e.pageX, e.pageY])[0]
+            if (e.pageY) e.y = globalPosition([e.pageX, e.pageY])[1]
+            lines.forEach(line => {
+                for(let i = 1; i < line.length; i++) {
+                    let p = line[i]
+                    if(Math.pow(p[0] - e.x, 2) + Math.pow(p[1] - e.y, 2) < (0.2 * zoom) ** 2 ){
+                        lines.splice(lines.indexOf(line), 1)
+                        break
+                    }
+                }
+            })
+        }
+
+        function move(e) {
+            if (e.pageX) e.x = globalPosition([e.pageX, e.pageY])[0]
+            if (e.pageY) e.y = globalPosition([e.pageX, e.pageY])[1]
+            lines.forEach(line => {
+                line.forEach(p => {
+                    if(Math.pow(p[0] - e.x, 2) + Math.pow(p[1] - e.y, 2) < (0.2 * zoom) ** 2 ){
+                        p[0] += e.dx * zoom / 100
+                        p[1] += e.dy * zoom / 100
+                    }
+                })
+            })
+        }
+
+        function onScreen(localPosition) {
+            return localPosition[0] >= 0 && localPosition[0] < canvas.width && localPosition[1] >= 0 && localPosition[1] < canvas.height
+        }
+        
+        function redraw(){
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            
+            ctx.lineWidth = Math.min(0.4, 50 / zoom)
+            let cellSize = 5000 / zoom
+            ctx.strokeStyle = "rgba(0, 0, 0, 1)"
+
+            for(let i = 0; i < 2; i++){
+                if (bg == 0) {
+                    for(let x = - ((cam[0] + canvas.width) / zoom * 100 - canvas.width / zoom * 50) % cellSize + canvas.width / 2; x < canvas.width; x += cellSize){
+                        ctx.beginPath()
+                        ctx.moveTo(x, 0)
+                        ctx.lineTo(x, canvas.height)
+                        ctx.stroke()
+                    }
+                    for(let y = - ((cam[1] + canvas.height) / zoom * 100 - canvas.height / zoom * 50) % cellSize + canvas.height / 2; y < canvas.height; y += cellSize){
+                        ctx.beginPath()
+                        ctx.moveTo(0, y)
+                        ctx.lineTo(canvas.width, y)
+                        ctx.stroke()
+                    }
+                    for(let x = - ((cam[0] + canvas.width) / zoom * 100 - canvas.width / zoom * 50) % cellSize + canvas.width / 2 - cellSize; x > 0; x -= cellSize){
+                        ctx.beginPath()
+                        ctx.moveTo(x, 0)
+                        ctx.lineTo(x, canvas.height)
+                        ctx.stroke()
+                    }
+                    for(let y = - ((cam[1] + canvas.height) / zoom * 100 - canvas.height / zoom * 50) % cellSize + canvas.height / 2 - cellSize; y > 0; y -= cellSize){
+                        ctx.beginPath()
+                        ctx.moveTo(0, y)
+                        ctx.lineTo(canvas.width, y)
+                        ctx.stroke()
+                    }
+                }
+                ctx.lineWidth = Math.min(0.4, 250 / zoom)
+                cellSize = 5000 / zoom * 5
+            }
+            
+            for (let id in imgs) {
+                img = imgs[id]
+                ctx.drawImage(img.img, localPosition([img.x, img.y])[0], localPosition([img.x, img.y])[1], img.width * 100 / zoom, img.height * 100 / zoom)
+                if(img.id == selectedImg){
+                    ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+                    ctx.fillRect(localPosition([img.x, img.y])[0], localPosition([img.x, img.y])[1], img.width * 100 / zoom, img.height * 100 / zoom)
+                    
+                    ctx.beginPath()
+                    ctx.moveTo(localPosition([img.x, img.y])[0], localPosition([img.x, img.y])[1])
+                    ctx.arc(localPosition([img.x, img.y])[0], localPosition([img.x, img.y])[1], uiScale, 0, 2 * Math.PI, false)
+                    ctx.moveTo(localPosition([img.x, img.y])[0] + img.width * 100 / zoom, localPosition([img.x, img.y])[1])
+                    ctx.arc(localPosition([img.x, img.y])[0] + img.width * 100 / zoom, localPosition([img.x, img.y])[1], uiScale, 0, 2 * Math.PI, false)
+                    ctx.moveTo(localPosition([img.x, img.y])[0], localPosition([img.x, img.y])[1] + img.height * 100 / zoom)
+                    ctx.arc(localPosition([img.x, img.y])[0], localPosition([img.x, img.y])[1] + img.height * 100 / zoom, uiScale, 0, 2 * Math.PI, false)
+                    ctx.moveTo(localPosition([img.x, img.y])[0] + img.width * 100 / zoom, localPosition([img.x, img.y])[1] + img.height * 100 / zoom)
+                    ctx.arc(localPosition([img.x, img.y])[0] + img.width * 100 / zoom, localPosition([img.x, img.y])[1] + img.height * 100 / zoom, uiScale, 0, 2 * Math.PI, false)
+                    ctx.fillStyle = 'rgba(50, 50, 150, 1)'
+                    ctx.fill()
+                }
+            }
+
+            for (let id in texts) {
+                text = texts[id]
+                ctx.font = text.size * 100 / zoom + 'px Times'
+                ctx.fillStyle = 'rgba(0, 0, 0, 1)'
+                let txt = (text.text == '' && selectedText == text.id) ? '_' : text.text
+                ctx.fillText(txt, localPosition([text.x, text.y])[0], localPosition([text.x, text.y])[1])
+                if(text.id == selectedText){
+                    let metrics = ctx.measureText(text);
+                    let height = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+                    let width = ctx.measureText(txt).width
+                    ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+                    ctx.fillRect(localPosition([text.x, text.y])[0], localPosition([text.x, text.y])[1], width, -height)
+                }
+            }
+
+            ctx.lineWidth = lineWidth * 100 / zoom
+
+            if(lines.length > 0) {
+                ctx.moveTo(lines[0][0], lines[0][1])
+                lines.forEach(line => {
+                    let filling = false
+                    if (line[0]) {
+                        if (line[0].backgroundColor) {
+                            filling = true
+                            ctx.fillStyle = line[0].backgroundColor
+                        }
+                        if (line[0].color) ctx.strokeStyle = line[0].color
+                        if (line[0].lineWidth) ctx.lineWidth = line[0].lineWidth * 100 / zoom
+                    }
+                    if(line.length <= 2){
+                        lines.splice(lines.indexOf(line), 1)
+                    }
+                    else{
+                        ctx.moveTo(localPosition(line[0])[0], localPosition(line[0])[1])
+                        ctx.beginPath()
+                        for(let i = 1; i < line.length; i++) {
+                            let p = line[i]
+                            ctx.lineTo(localPosition(p)[0], localPosition(p)[1])
+                        }
+                        if (filling) ctx.fill()
+                        ctx.stroke()
+                    }
+                })
+            }
+            if(tempLines.length > 0) {
+                tempLines.forEach(l => {
+                    ctx.beginPath()
+                    l.line.forEach(pos => {
+                        ctx.lineTo(localPosition(pos)[0], localPosition(pos)[1])
+                    })
+                    ctx.stroke()
+                })
+            }
+            ctx.strokeStyle = color
+            ctx.lineWidth = lineWidth * 100 / zoom
+            if(tempLine.length > 1) {
+                ctx.beginPath()
+                tempLine.forEach(pos => {
+                    ctx.lineTo(pos[0], pos[1])
+                })
+                ctx.stroke()
+            }
+            if(linesBeforeSend.length > 1) {
+                ctx.beginPath()
+                linesBeforeSend.forEach(pos => {
+                    ctx.lineTo(pos[0], pos[1])
+                })
+                ctx.stroke()
+            }
+
+            if (pressed && button == 0 && paintMode == 'cursor' && selectedImg == -1 && selectedText == -1) {
+                ctx.strokeStyle = "rgba(0, 0, 255, 0.3)"
+                ctx.fillStyle = 'rgba(0, 0, 255, 0.2)'
+                ctx.lineWidth = 10
+                ctx.fillRect(startPoint[0], startPoint[1], pos[0] - startPoint[0], pos[1] - startPoint[1])
+                ctx.strokeRect(startPoint[0], startPoint[1], pos[0] - startPoint[0], pos[1] - startPoint[1])
+            }
+
+            if(paintMode == 'eraser' || paintMode == 'finger' || paintMode == 'line_eraser') {
+                ctx.strokeStyle = "rgba(0, 0, 0, 0.5)"
+                ctx.lineWidth = 2
+                ctx.beginPath()
+                ctx.arc(pos[0], pos[1], eraserSize, 0, 2 * Math.PI)
+                ctx.stroke()
+            }
+            else if(paintMode == 'pen' || paintMode == 'filling_pen') {
+                ctx.strokeStyle = `rgba(0, 0, 0, 0.5)`
+                ctx.lineWidth = 1
+                ctx.beginPath()
+                ctx.arc(pos[0], pos[1], lineWidth * 100 / zoom / 2, 0, 2 * Math.PI)
+                ctx.stroke()
+            }
+        }
+
+        function mouseDown(e){
+            redraw(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+            })
+            pressed = true
+            ctx.moveTo(e.pageX, e.pageY)
+            line = [globalPosition([e.pageX, e.pageY])]
+            tempLine = [[e.pageX, e.pageY]]
+            startPoint = [e.pageX, e.pageY]
+            button = e.button
+            pos = [e.pageX, e.pageY]
+            if (paintMode == 'cursor' && selectedImg != -1) {
+                let img = imgs[selectedImg]
+                if (Math.pow(e.pageX - localPosition([img.x, img.y])[0], 2) + Math.pow(e.pageY - localPosition([img.x, img.y])[1], 2) < Math.pow(uiScale, 2)) {
+                    scalingMode = 1
+                }
+                else if (Math.pow(e.pageX - localPosition([img.x + img.width, img.y])[0], 2) + Math.pow(e.pageY - localPosition([img.x + img.width, img.y])[1], 2) < Math.pow(uiScale, 2)) {
+                    scalingMode = 2
+                }
+                else if (Math.pow(e.pageX - localPosition([img.x, img.y + img.height])[0], 2) + Math.pow(e.pageY - localPosition([img.x, img.y + img.height])[1], 2) < Math.pow(uiScale, 2)) {
+                    scalingMode = 3
+                }
+                else if (Math.pow(e.pageX - localPosition([img.x + img.width, img.y + img.height])[0], 2) + Math.pow(e.pageY - localPosition([img.x + img.width, img.y + img.height])[1], 2) < Math.pow(uiScale, 2)) {
+                    scalingMode = 4
+                }
+                else if (globalPosition([e.pageX, e.pageY])[0] < img.x ||
+                    globalPosition([e.pageX, e.pageY])[0] > img.x + img.width ||
+                    globalPosition([e.pageX, e.pageY])[1] < img.y ||
+                    globalPosition([e.pageX, e.pageY])[1] > img.y + img.height) {
+                    selectedImg = -1
+                }
+            }
+            else if (paintMode == 'cursor' && selectedText != -1) {
+                let text = texts[selectedText]
+                let w = ctx.measureText(text.text).width * zoom / 100
+                let metrics = ctx.measureText(text)
+                let h = (metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent) / 100 * zoom
+                if (globalPosition([e.pageX, e.pageY])[0] < text.x ||
+                    globalPosition([e.pageX, e.pageY])[0] > text.x + w ||
+                    globalPosition([e.pageX, e.pageY])[1] < text.y - h ||
+                    globalPosition([e.pageX, e.pageY])[1] > text.y) {
+                    selectedText = -1
+                }
+            }
+            redraw()
+        }
+
+        function mouseMove(e){
+            if (pressed && button == 0 && paintMode != 'hand') {
+                if((paintMode == 'pen' || paintMode == 'filling_pen') && Math.pow(lastPoint[0] - e.pageX, 2) + Math.pow(lastPoint[1] - e.pageY, 2) > 9){
+                    tempLine.push([e.pageX, e.pageY])
+                    line.push(globalPosition([e.pageX, e.pageY]))
+                    lastPoint = [e.pageX, e.pageY]
+                }
+                else if (paintMode == 'eraser') {
+                    erase({pageX: e.pageX, pageY: e.pageY})
+                    if (isReadyToSend()) wsc.send(JSON.stringify({erase: {x: globalPosition([e.pageX, e.pageY])[0], y: globalPosition([e.pageX, e.pageY])[1], size: eraserSize * zoom / 100}, desk: desk}))
+                }
+                else if (paintMode == 'line_eraser') {
+                    line_erase({pageX: e.pageX, pageY: e.pageY})
+                    if (isReadyToSend()) wsc.send(JSON.stringify({line_erase: {x: globalPosition([e.pageX, e.pageY])[0], y: globalPosition([e.pageX, e.pageY])[1], size: eraserSize * zoom / 100}, desk: desk}))
+                }
+                else if (paintMode == 'finger') {
+                    move({pageX: e.pageX, pageY: e.pageY, dx: e.pageX - pos[0], dy: e.pageY - pos[1]})
+                    //if (isReadyToSend()) wsc.send(JSON.stringify({erase: {x: globalPosition([e.pageX, e.pageY])[0], y: globalPosition([e.pageX, e.pageY])[1], size: eraserSize * zoom / 100}, desk: desk}))
+                }
+                else if (paintMode == 'rectangle' || paintMode == 'filling_rectangle') {
+                    tempLine = [
+                        [startPoint[0], startPoint[1]],
+                        [e.pageX, startPoint[1]],
+                        [e.pageX, e.pageY],
+                        [startPoint[0], e.pageY],
+                        [startPoint[0], startPoint[1]]]
+                }
+                else if (paintMode == 'line') {
+                    tempLine = [
+                        [startPoint[0], startPoint[1]],
+                        [e.pageX, e.pageY]]
+                }
+                else if (paintMode == 'ellipse' || paintMode == 'filling_ellipse') {
+                    tempLine = []
+                    for(let i = 0; i <= 100; i++){
+                        tempLine.push([
+                            Math.cos(i / 50 * Math.PI) * Math.abs(e.pageX - startPoint[0]) / 2 + (startPoint[0] + e.pageX) / 2,
+                            Math.sin(i / 50 * Math.PI) * Math.abs(e.pageY - startPoint[1]) / 2 + (startPoint[1] + e.pageY) / 2
+                        ])
+                    }
+                }
+                else if (paintMode == 'cursor' && selectedImg != -1 && scalingMode == 1) {
+                    imgs[selectedImg].width -= (e.pageX - pos[0]) * zoom / 100
+                    imgs[selectedImg].height -= (e.pageY - pos[1]) * zoom / 100
+                    imgs[selectedImg].x += (e.pageX - pos[0]) * zoom / 100
+                    imgs[selectedImg].y += (e.pageY - pos[1]) * zoom / 100
+                    let json = {
+                        x: imgs[selectedImg].x,
+                        y: imgs[selectedImg].y,
+                        width: imgs[selectedImg].width,
+                        height: imgs[selectedImg].height,
+                        id: imgs[selectedImg].id
+                    }
+                    if (isReadyToSend()) wsc.send(JSON.stringify({image: json, desk: desk}))
+                }
+                else if (paintMode == 'cursor' && selectedImg != -1 && scalingMode == 2) {
+                    imgs[selectedImg].width += (e.pageX - pos[0]) * zoom / 100
+                    imgs[selectedImg].height -= (e.pageY - pos[1]) * zoom / 100
+                    imgs[selectedImg].y += (e.pageY - pos[1]) * zoom / 100
+                    let json = {
+                        x: imgs[selectedImg].x,
+                        y: imgs[selectedImg].y,
+                        width: imgs[selectedImg].width,
+                        height: imgs[selectedImg].height,
+                        id: imgs[selectedImg].id
+                    }
+                    if (isReadyToSend()) wsc.send(JSON.stringify({image: json, desk: desk}))
+                }
+                else if (paintMode == 'cursor' && selectedImg != -1 && scalingMode == 3) {
+                    imgs[selectedImg].width -= (e.pageX - pos[0]) * zoom / 100
+                    imgs[selectedImg].height += (e.pageY - pos[1]) * zoom / 100
+                    imgs[selectedImg].x += (e.pageX - pos[0]) * zoom / 100
+                    let json = {
+                        x: imgs[selectedImg].x,
+                        y: imgs[selectedImg].y,
+                        width: imgs[selectedImg].width,
+                        height: imgs[selectedImg].height,
+                        id: imgs[selectedImg].id
+                    }
+                    if (isReadyToSend()) wsc.send(JSON.stringify({image: json, desk: desk}))
+                }
+                else if (paintMode == 'cursor' && selectedImg != -1 && scalingMode == 4) {
+                    imgs[selectedImg].width += (e.pageX - pos[0]) * zoom / 100
+                    imgs[selectedImg].height += (e.pageY - pos[1]) * zoom / 100
+                    let json = {
+                        x: imgs[selectedImg].x,
+                        y: imgs[selectedImg].y,
+                        width: imgs[selectedImg].width,
+                        height: imgs[selectedImg].height,
+                        id: imgs[selectedImg].id
+                    }
+                    if (isReadyToSend()) wsc.send(JSON.stringify({image: json, desk: desk}))
+                }
+                else if (paintMode == 'cursor' && selectedImg != -1) {
+                    imgs[selectedImg].x += (e.pageX - pos[0]) * zoom / 100
+                    imgs[selectedImg].y += (e.pageY - pos[1]) * zoom / 100
+                    let json = {
+                        x: imgs[selectedImg].x,
+                        y: imgs[selectedImg].y,
+                        id: imgs[selectedImg].id
+                    }
+                    if (isReadyToSend()) wsc.send(JSON.stringify({image: json, desk: desk}))
+                }
+                else if (paintMode == 'cursor' && selectedText != -1) {
+                    texts[selectedText].x += (e.pageX - pos[0]) * zoom / 100
+                    texts[selectedText].y += (e.pageY - pos[1]) * zoom / 100
+                    let json = {
+                        x: texts[selectedText].x,
+                        y: texts[selectedText].y,
+                        id: selectedText
+                    }
+                    if (isReadyToSend()) wsc.send(JSON.stringify({text: json, desk: desk}))
+                }
+                redraw()
+            }
+            else if (pressed && (button == 1 || paintMode == 'hand')) {
+                cam = [cam[0] - (e.pageX - pos[0]) * zoom / 100, cam[1] - (e.pageY - pos[1]) * zoom / 100]
+                redraw()
+            }
+            if (paintMode == 'eraser' || paintMode == 'finger' || paintMode == 'pen' || paintMode == 'filling_pen' || paintMode == 'line_eraser') {
+                redraw()
+            }
+            let temp = []
+            tempLine.forEach(pos => {
+                temp.push([globalPosition(pos)[0], globalPosition(pos)[1]])
+            })
+            if (tempLine.length > 1) {
+                let json = {
+                    line: temp,
+                    id: tempLineId
+                }
+                if (isReadyToSend()) wsc.send(JSON.stringify({tempLine: json, desk: desk}))
+            }
+            pos = [e.pageX, e.pageY]
+        }
+        
+        function mouseUp(e){
+            if (button == 0) {
+                if (paintMode == 'rectangle' || paintMode == 'filling_rectangle') {
+                    line = []
+                    let nx = Math.max(Math.min(Math.ceil(Math.abs(globalPosition([pos[0], 0])[0] - globalPosition([startPoint[0], 0])[0]) / 100), 30), 1)
+                    let ny = Math.max(Math.min(Math.ceil(Math.abs(globalPosition([0, pos[1]])[1] - globalPosition([0, startPoint[1]])[1]) / 100), 30), 1)
+                    for(let i = 0; i < nx; i++){
+                        let x = startPoint[0] + (pos[0] - startPoint[0]) / nx * i
+                        line.push(globalPosition([x, startPoint[1]]))
+                    }
+                    for(let i = 0; i < ny; i++){
+                        let y = startPoint[1] + (pos[1] - startPoint[1]) / ny * i
+                        line.push(globalPosition([pos[0], y]))
+                    }
+                    for(let i = nx; i >= 0; i--){
+                        let x = startPoint[0] + (pos[0] - startPoint[0]) / nx * i
+                        line.push(globalPosition([x, pos[1]]))
+                    }
+                    for(let i = ny; i >= 0; i--){
+                        let y = startPoint[1] + (pos[1] - startPoint[1]) / ny * i
+                        line.push(globalPosition([startPoint[0], y]))
+                    }
+                }
+                else if (paintMode == 'line') {
+                    line = [globalPosition([startPoint[0], startPoint[1]]),
+                            globalPosition([e.pageX, e.pageY])]
+                }
+                else if (paintMode == 'ellipse' || paintMode == 'filling_ellipse') {
+                    let temp = []
+                    for(let i = 0; i <= 50; i++){
+                        temp.push(
+                            globalPosition(
+                                [Math.cos(i / 25 * Math.PI) * Math.abs(e.pageX - startPoint[0]) / 2 + (startPoint[0] + e.pageX) / 2,
+                                 Math.sin(i / 25 * Math.PI) * Math.abs(e.pageY - startPoint[1]) / 2 + (startPoint[1] + e.pageY) / 2])
+                        )
+                    }
+                    line = temp
+                }
+                else if (paintMode == 'text') {
+                    let id = uuidv4()
+                    texts[id] = {
+                        text: '',
+                        x: globalPosition([e.pageX, e.pageY])[0],
+                        y: globalPosition([e.pageX, e.pageY])[1],
+                        size: 50,
+                        id: id
+                    }
+                    selectedText = id
+                    if (navigator.userAgentData.mobile) document.getElementById("mobileInput").focus()
+                }
+                if (paintMode == 'cursor' && scalingMode == -1) {
+                    selectedImg = -1
+                    for (let id in imgs) {
+                        img = imgs[id]
+                        if (globalPosition([e.pageX, e.pageY])[0] >= img.x &&
+                            globalPosition([e.pageX, e.pageY])[0] <= img.x + img.width &&
+                            globalPosition([e.pageX, e.pageY])[1] >= img.y &&
+                            globalPosition([e.pageX, e.pageY])[1] <= img.y + img.height) {
+                            selectedText = -1
+                            selectedImg = id
+                        }
+                    }
+                }
+                if (paintMode == 'cursor' && scalingMode == -1) {
+                    selectedText = -1
+                    for (let id in texts) {
+                        text = texts[id]
+                        let metrics = ctx.measureText(text)
+                        let fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent
+                        if (globalPosition([e.pageX, e.pageY])[0] >= text.x &&
+                            globalPosition([e.pageX, e.pageY])[0] <= text.x + ctx.measureText(text.text).width * zoom / 100 &&
+                            globalPosition([e.pageX, e.pageY])[1] >= text.y - fontHeight * zoom / 100 &&
+                            globalPosition([e.pageX, e.pageY])[1] <= text.y) {
+                            selectedImg = -1
+                            selectedText = text.id
+                            if (navigator.userAgentData.mobile) document.getElementById("mobileInput").focus()
+                        }
+                    }
+                }
+                scalingMode = -1
+            }
+            pressed = false
+            if(line.length > 1) {
+                lastLineId = uuidv4()
+                options = {
+                    color: color,
+                    lineWidth: lineWidth,
+                    id: lastLineId
+                }
+                if (paintMode == 'filling_pen' || paintMode == 'filling_rectangle' || paintMode == 'filling_ellipse') options.backgroundColor = fill_color
+                line = [options].concat(line)
+                lines.push(line)
+            }
+            let json = {
+                line: '',
+                id: tempLineId
+            }
+            wsc.send(JSON.stringify({tempLine: json, line: line.length > 1 ? line : undefined, desk: desk}))
+            line = []
+            tempLine = []
+            redraw()
+        }
+
+        function mouseOut(e){
+            if (paintMode != 'rectangle' && paintMode != 'filling_rectangle' && paintMode != 'line' && paintMode != 'ellipse' && paintMode != 'filling_ellipse' && paintMode != 'cursor' && paintMode != 'text') {
+                mouseUp({pageX: e.pageX, pageY: e.pageY})
+            }
+            selectedImg = -1
+            scalingMode = -1
+            pos = [-50000, -50000]
+            redraw()
+        }
+
+        document.onkeydown = (e) => {
+            if (e.shiftKey && e.repeat == false){
+                lastPaintMode = paintMode
+                paintMode = 'hand'
+                document.getElementById("canvas").style.cursor = "grab"
+            }
+            if (e.ctrlKey && e.repeat == false){
+                if (e.key == 'z' && lastLineId != undefined) {
+                    for(let i = 0; i < lines.length; i++) {
+                        if (lines[i][0] != undefined) {
+                            if (lines[i][0].id == lastLineId) {
+                                lines.splice(i, 1)
+                                wsc.send(JSON.stringify({undo: {lineId: lastLineId, tempLineId: tempLineId}, desk: desk}))
+                                lastLineId = undefined
+                                redraw()
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+            if (selectedText != -1) {
+                if (e.code == "Backspace") {
+                    texts[selectedText].text = texts[selectedText].text.slice(0, -1)
+                }
+                else if (e.key.length == 1) {
+                    texts[selectedText].text += e.key
+                }
+                redraw()
+                if (wsc.readyState == 1) wsc.send(JSON.stringify({text: texts[selectedText], desk: desk}))
+                if (e.code == "Enter" || e.code == "Escape") {
+                    selectedText = -1
+                }
+            }
+        }
+
+        document.onkeyup = (e) => {
+            if(e.keyCode == 16){
+                paintMode = lastPaintMode
+                if(paintMode == 'cursor'){
+                    document.getElementById("canvas").style.cursor = "default"
+                }
+                else if(paintMode == 'hand'){
+                    document.getElementById("canvas").style.cursor = "grab"
+                }
+                else{
+                    document.getElementById("canvas").style.cursor = "crosshair"
+                }
+            }
+            /*
+            if(e.code == "BracketLeft" && selectedImg != -1 && selectedImg > 0){
+                let buffer = imgs[selectedImg]
+                imgs[selectedImg] = imgs[selectedImg - 1]
+                imgs[selectedImg - 1] = buffer
+                selectedImg--
+                redraw()
+            }
+            if(e.code == "BracketRight" && selectedImg != -1 && selectedImg < imgs.length - 1){
+                let buffer = imgs[selectedImg]
+                imgs[selectedImg] = imgs[selectedImg + 1]
+                imgs[selectedImg + 1] = buffer
+                selectedImg++
+                redraw()
+            }
+            */
+            if(e.code == "Delete" && selectedImg != -1){
+                let json = {
+                    src: '',
+                    id: selectedImg
+                }
+                wsc.send(JSON.stringify({image: json, desk: desk}))
+                delete imgs[selectedImg]
+                selectedImg = -1
+                redraw()
+            }
+            if(e.code == "Delete" && selectedText != -1){
+                texts[selectedText].text = ''
+                wsc.send(JSON.stringify({text: {text: '', id: selectedText}, desk: desk}))
+                delete texts[selectedText]
+                selectedText = -1
+                redraw()
+            }
+        }
+        
+        document.getElementById("mobileInput").oninput = (e) => {
+            let code = e.target.value != '' ? "Key" + e.target.value[e.target.value.length - 1].toUpperCase() : "Backspace"
+            document.onkeydown({code: code, key: e.target.value[e.target.value.length - 1]})
+            document.onkeyup({code: code, key: e.target.value[e.target.value.length - 1]})
+            e.target.value = ''
+        }
+
+        function scaling(e){
+            if (touches.length > 1) {
+                cam = [cam[0] - (e.touches[0].pageX - touches[0].pageX) * zoom / 200, cam[1] - (e.touches[0].pageY - touches[0].pageY) * zoom / 200]
+                cam = [cam[0] - (e.touches[1].pageX - touches[1].pageX) * zoom / 200, cam[1] - (e.touches[1].pageY - touches[1].pageY) * zoom / 200]
+                touches = e.touches
+                redraw()
+            }
+            else {
+                touches = e.touches
+            }
+        }
+        
+        canvas.ontouchstart = (e) => {
+            e.preventDefault()
+            touches = e.touches
+            mouseDown({pageX: e.touches[0].pageX, pageY: e.touches[0].pageY, button: 0})
+        }
+        canvas.ontouchend = (e) => { 
+            e.preventDefault()
+            mouseUp({button: 0, pageX: pos[0], pageY: pos[1]})
+        }
+        canvas.ontouchmove = (e) => {
+            e.preventDefault()
+            if (e.touches.length > 1) {
+                scaling({touches: e.touches})
+            }
+            else {
+                mouseMove({pageX: e.touches[0].pageX, pageY: e.touches[0].pageY, button: 0})
+            }
+        }
+        
+        function LinesToString(array) {
+            return array.join('&')
+        }
+        function StringToLines(string) {
+            let result = []
+            let t = string.split('&')
+            for(let i = 0; i < t.length; i++){
+                let c = t[i].split(',')
+                let a = []
+                for(let j = 0; j < c.length; j+=2){
+                    a.push([c[j], c[j+1]])
+                }
+                result.push(a)
+            }
+            return result
+        }
+
+        function isReadyToSend(){
+            if (!readyToSend) return false
+            readyToSend = false
+            setTimeout(() => {readyToSend = true}, 25)
+            return true
+        }
+
+        document.onpaste = function (pasteEvent) {
+            const item = pasteEvent.clipboardData.items[0]
+            if (item.type.indexOf("image") === 0) {
+                const blob = item.getAsFile()
+
+                const reader = new FileReader()
+
+                reader.onload = function (event) {
+                    var img = new Image()
+                    img.src = event.target.result
+                    let id = uuidv4()
+                    img.onload = () => {
+                        imgs[id] = {
+                            img: img,
+                            x: cam[0] + canvas.width / 2,
+                            y: cam[1] + canvas.height / 2,
+                            width: img.width * zoom / 100,
+                            height: img.height * zoom / 100,
+                            id: id
+                        }
+                        redraw()
+                        let json = {
+                            src: event.target.result,
+                            x: cam[0] + canvas.width / 2,
+                            y: cam[1] + canvas.height / 2,
+                            width: img.width * zoom / 100,
+                            height: img.height * zoom / 100,
+                            id: id
+                        }
+                        wsc.send(JSON.stringify({image: json, desk: desk}))
+                    }
+                }
+
+                reader.readAsDataURL(blob)
+            }
+        }
+        document.getElementById("imageInput").onchange = () => {
+            var file = document.getElementById("imageInput").files[0]
+            
+            const reader = new FileReader()
+            
+            reader.onload = function (event) {
+                var img = new Image()
+                img.src = event.target.result
+                let id = uuidv4()
+                img.onload = () => {
+                    imgs[id] = {
+                        img: img,
+                        x: cam[0] + canvas.width / 2,
+                        y: cam[1] + canvas.height / 2,
+                        width: img.width * zoom / 100,
+                        height: img.height * zoom / 100,
+                        id: id
+                    }
+                    redraw()
+                    let json = {
+                        src: event.target.result,
+                        x: cam[0] + canvas.width / 2,
+                        y: cam[1] + canvas.height / 2,
+                        width: img.width * zoom / 100,
+                        height: img.height * zoom / 100,
+                        id: id
+                    }
+                    wsc.send(JSON.stringify({image: json, desk: desk}))
+                }
+            }
+            
+            reader.readAsDataURL(file)
+        }
+    </script>
+</body>
+</html>
